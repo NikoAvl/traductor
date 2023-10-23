@@ -2,23 +2,25 @@ import speech_recognition as sr
 import pyttsx3
 from deep_translator import GoogleTranslator
 
+#Se crea y configura el traductor
+traductor = GoogleTranslator(source="auto", target="en") 
 
-r = sr.Recognizer()
+#Se crea y configura el oyente 
+oyente = sr.Recognizer() 
+oyente.pause_threshold = 2.0 #Intervalo de silencio antes de que se corte el audio 
+
+#Se crea y configura el narrador 
 narrador = pyttsx3.init()
-traductor = GoogleTranslator(source='es', target='en')
-r.pause_threshold = 4.0
-narrador.setProperty('rate', 120)
-
+narrador.setProperty("rate", 110)
+narrador.setProperty("voice", "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Speech\Voices\Tokens\TTS_MS_EN-US_ZIRA_11.0") #SE ESTABLECE LA VOZ DEL NARRADOR EN INGLES
 
 with sr.Microphone() as source:
-
     print("Di algo: ")
-
-    audio = r.listen(source)
+    audio = oyente.listen(source)
     
 
 try:
-    texto = r.recognize_google(audio, language='es-ES')
+    texto = oyente.recognize_google(audio, language="es-ES")
     
     traduccion_texto = traductor.translate(texto)
 
